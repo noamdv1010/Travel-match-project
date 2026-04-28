@@ -2,26 +2,178 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap');
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink:  #060812;
+  --ink1: #0A0C1D;
+  --ink2: #0E1128;
+  --ink3: #141730;
+  --ink4: #1A1D3A;
+  --ink5: #212548;
+
+  --b1: rgba(255,255,255,0.05);
+  --b2: rgba(255,255,255,0.09);
+  --b3: rgba(255,255,255,0.16);
+
+  --t1: #EEEEFF;
+  --t2: #A8ACCA;
+  --t3: #595D7A;
+  --t4: #2E3250;
+
+  /* Brand — logo's pink-to-purple */
+  --g1: #A428B4;
+  --g2: #CA38BF;
+  --g3: #EA7DD6;
+  --g4: #F8D0F3;
+  --glow:    rgba(164,40,180,0.14);
+  --glow2:   rgba(164,40,180,0.07);
+  --gborder: rgba(164,40,180,0.30);
+
+  --cyan:   #06B6D4;
+  --cyan2:  #0891B2;
+  --pink:   #F43F5E;
+  --mint:   #10B981;
+  --amber:  #F59E0B;
+  --violet: #8B5CF6;
+
+  --serif: 'Libre Baskerville', serif;
+  --sans:  'Plus Jakarta Sans', sans-serif;
+  --ease:   cubic-bezier(.4,0,.2,1);
+  --spring: cubic-bezier(.34,1.56,.64,1);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html, body { height: 100%; overflow: hidden; background: var(--ink); }
+body { font-family: var(--sans); color: var(--t1); -webkit-font-smoothing: antialiased; }
+#__next, main { height: 100%; }
+::-webkit-scrollbar { display: none; }
+* { scrollbar-width: none; }
+
+/* ── Core animations ── */
+@keyframes spin     { to { transform: rotate(360deg); } }
+@keyframes bounce   { from { transform: translateY(0); } to { transform: translateY(-8px); } }
+@keyframes float    { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes marquee  { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes pulse-glow { 0%,100% { opacity: .6; } 50% { opacity: 1; } }
+@keyframes fade-in  { from { opacity: 0; } to { opacity: 1; } }
+
+/* ── Match animation ── */
+@keyframes confetti-fly {
+  0%   { opacity: 1; transform: translate(0, 0) rotate(0deg) scale(1); }
+  85%  { opacity: .7; }
+  100% { opacity: 0; transform: translate(var(--tx), var(--ty)) rotate(var(--tr)) scale(.08); }
+}
+@keyframes heart-rise {
+  0%   { opacity: 0; transform: translateY(0) scale(.5); }
+  18%  { opacity: 1; transform: translateY(-22px) scale(1.15); }
+  80%  { opacity: .8; }
+  100% { opacity: 0; transform: translateY(-350px) scale(.4); }
+}
+@keyframes ring-expand {
+  0%   { transform: translate(-50%,-50%) scale(.4); opacity: .85; }
+  100% { transform: translate(-50%,-50%) scale(3.6); opacity: 0; }
+}
+@keyframes photo-from-left {
+  0%   { opacity: 0; transform: translateX(-180px) rotate(-22deg) scale(.6); }
+  68%  { opacity: 1; transform: translateX(6px) rotate(-5deg) scale(1.06); }
+  100% { opacity: 1; transform: translateX(0) rotate(-7deg) scale(1); }
+}
+@keyframes photo-from-right {
+  0%   { opacity: 0; transform: translateX(180px) rotate(22deg) scale(.6); }
+  68%  { opacity: 1; transform: translateX(-6px) rotate(5deg) scale(1.06); }
+  100% { opacity: 1; transform: translateX(0) rotate(7deg) scale(1); }
+}
+@keyframes match-title {
+  0%   { opacity: 0; transform: scale(.25) translateY(50px); }
+  52%  { opacity: 1; transform: scale(1.16) translateY(-6px); }
+  74%  { transform: scale(.95) translateY(3px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes match-bg-pulse {
+  0%,100% { opacity: .7; }
+  50%      { opacity: 1; }
+}
+/* ── Ad timer ring ── */
+@keyframes ad-ring {
+  from { stroke-dashoffset: 175.93; }  /* 2π×28 */
+  to   { stroke-dashoffset: 0; }
+}
+/* ── Chat ── */
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(10px) scale(.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+/* ── Match celebration extra ── */
+@keyframes scale-pop {
+  0%   { opacity: 0; transform: scale(0); }
+  60%  { opacity: 1; transform: scale(1.22); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes glow-pulse {
+  0%,100% { box-shadow: 0 8px 36px rgba(168,85,247,.38); }
+  50%      { box-shadow: 0 12px 56px rgba(168,85,247,.65), 0 0 80px rgba(236,72,153,.25); }
+}
+@keyframes online-pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .55; transform: scale(.82); }
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ── Luxury UI extras ── */
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes border-glow {
+  0%,100% { box-shadow: 0 0 0 1px rgba(168,85,247,.2), 0 8px 32px rgba(168,85,247,.12); }
+  50%      { box-shadow: 0 0 0 1px rgba(236,72,153,.35), 0 12px 48px rgba(236,72,153,.2); }
+}
+@keyframes float-slow {
+  0%,100% { transform: translateY(0) rotate(0deg); }
+  33%      { transform: translateY(-6px) rotate(1deg); }
+  66%      { transform: translateY(-3px) rotate(-1deg); }
+}
+@keyframes orb-drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25%      { transform: translate(20px,-15px) scale(1.05); }
+  50%      { transform: translate(-10px,-25px) scale(.97); }
+  75%      { transform: translate(-20px,10px) scale(1.03); }
+}
+@keyframes number-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.25); color: var(--g3); }
+  100% { transform: scale(1); }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .font-serif { font-family: var(--serif); }
+  .font-sans  { font-family: var(--sans);  }
+  .glass {
+    background: rgba(255,255,255,.04);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .glow-border {
+    animation: border-glow 4s ease-in-out infinite;
   }
 }
